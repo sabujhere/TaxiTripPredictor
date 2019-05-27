@@ -7,8 +7,16 @@
         xmlns:viewModel="clr-namespace:TripPredictor.UI.ViewModel"
         xmlns:views="clr-namespace:TripPredictor.UI.Views"
         mc:Ignorable="d"
-        Title="TripPricePredictor" Height="640" Width="800">
-    
+        Title="TripPricePredictor" Height="700" Width="800">
+    <Window.Resources>
+        <DataTemplate x:Key="TestTripTimeViewTemplate" DataType="{x:Type viewModel:MainWindowViewModel}">
+            <views:TestTripTimeView />
+        </DataTemplate>
+
+        <DataTemplate x:Key="TestTripFareViewTemplate" DataType="{x:Type viewModel:MainWindowViewModel}">
+            <views:TestTripFareView />
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="90"/>
@@ -40,8 +48,20 @@
         <GroupBox Grid.Row="2"
                   Margin="10"
                   Header="Test Model">
-            <views:TestTripTimeView HorizontalAlignment="Center"
-                                    DataContext="{Binding TestTripDataPredictionViewModel}"/>
+            <ContentControl Content="{Binding }"
+                            DataContext="{Binding TripDataPredictionViewModel}">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Setter Property="ContentTemplate" Value="{StaticResource TestTripTimeViewTemplate}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, 
+                    Path=DataContext.(viewModel:MainWindowViewModel.IsTripTimePredictorImpl)}"  Value="False">
+                                <Setter Property="ContentTemplate" Value="{StaticResource TestTripFareViewTemplate}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
         </GroupBox>
         <Label Grid.Row="3"
 

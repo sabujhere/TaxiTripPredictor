@@ -9,6 +9,7 @@ using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Events;
 using TripPredictor.Common;
+using TripPredictor.Services;
 using TripPredictor.UI.Events;
 
 namespace TripPredictor.UI.ViewModel
@@ -26,7 +27,11 @@ namespace TripPredictor.UI.ViewModel
         #endregion
 
         #region Constructor
-
+        public bool IsTripTimePredictorImpl
+        {
+            get;
+            set;
+        }
         public MainWindowViewModel(
             ITripPredictor predictor,
             IEventAggregator eventAggregator,
@@ -38,6 +43,7 @@ namespace TripPredictor.UI.ViewModel
             EvaluationMetricViewModel = evaluationMetricViewModelCreator();
             TripPredictor = predictor;
             LoadEvaluationResult = new DelegateCommand(OnLoadTrainingDataExecute, OnLoadTrainingDataCanExecute);
+            IsTripTimePredictorImpl = TripPredictor is TripTimePredictorImpl;
         }
 
         #endregion
