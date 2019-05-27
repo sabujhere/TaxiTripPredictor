@@ -11,16 +11,30 @@ namespace TripPredictor.UI.StartUp
     {
         public IContainer Bootstrap()
         {
+            bool isLoadingTripFarePredictor = true;
             var builder = new ContainerBuilder();
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
-            builder.RegisterType<TripFarePredictorImpl>().As<ITripPredictor>().SingleInstance(); 
+            
             builder.RegisterType<MainWindowViewModel>().AsSelf();
             builder.RegisterType<EvaluationMetricViewModel>().As<IEvaluationMetricViewModel>();
-            builder.RegisterType<TripTimePredictionViewModel>().As<ITripDataPredictionViewModel>();
             builder.RegisterType<MainWindow>().AsSelf();
             builder.RegisterType<EvaluationMetricView>().AsSelf();
+
             builder.RegisterType<TestTripTimeView>().AsSelf();
+
+            if (isLoadingTripFarePredictor)
+            {
+                builder.RegisterType<TripFarePredictorImpl>().As<ITripPredictor>().SingleInstance();
+                builder.RegisterType<TripFarePredictionViewModel>().As<ITripDataPredictionViewModel>();
+                builder.RegisterType<TestTripFareView>().AsSelf();
+            }
+            else
+            {
+                builder.RegisterType<TripTimePredictionViewModel>().As<ITripPredictor>().SingleInstance();
+                builder.RegisterType<TripTimePredictionViewModel>().As<ITripDataPredictionViewModel>();
+                builder.RegisterType<TestTripTimeView>().AsSelf();
+            }
 
             return builder.Build();
         }
