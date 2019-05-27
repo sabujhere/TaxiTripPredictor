@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
 using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Events;
-using TripPredictor.Common;
 using TripPredictor.Common.Interfaces;
 using TripPredictor.Services;
 using TripPredictor.UI.Events;
