@@ -15,7 +15,7 @@ namespace TripPredictor.UI.ViewModel
 
         private string _statusMessage;
 
-        private string _currentTrainingFileName;
+        private string _currentTrainingFilePath;
 
         private readonly IEventAggregator _eventAggregator;
 
@@ -55,8 +55,8 @@ namespace TripPredictor.UI.ViewModel
             OpenFileDialog openFileDialog = new OpenFileDialog { Filter = "Csv files (*.csv)|*.csv" };
             if (openFileDialog.ShowDialog() == true)
             {
-                CurrentTrainingFileName = openFileDialog.FileName;
-                await LoadAsync(CurrentTrainingFileName);
+                CurrentTrainingFilePath = openFileDialog.FileName;
+                await LoadAsync(CurrentTrainingFilePath);
             }
         }
 
@@ -90,12 +90,12 @@ namespace TripPredictor.UI.ViewModel
 
         public ITripPredictor TripPredictor { get; }
         public DelegateCommand LoadEvaluationResult { get; }
-        public string CurrentTrainingFileName
+        public string CurrentTrainingFilePath
         {
-            get => _currentTrainingFileName;
+            get => _currentTrainingFilePath;
             private set
             {
-                _currentTrainingFileName = value;
+                _currentTrainingFilePath = value;
                 OnPropertyChanged();
             }
         }
