@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
-using Regression_TaxiFarePrediction.DataStructures;
 using TripPredictor.Common;
 
 namespace TripPredictor.Services
