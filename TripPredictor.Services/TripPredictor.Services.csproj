@@ -133,6 +133,9 @@
     <Content Include="Data\Test_yellow_tripdata_2017-01-001.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Data\Training_yellow_tripdata_2017-01-002.csv" />
+    <None Include="Data\Training_yellow_tripdata_2017-01-003.csv" />
+    <None Include="Data\Training_yellow_tripdata_2017-01-004.csv" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
