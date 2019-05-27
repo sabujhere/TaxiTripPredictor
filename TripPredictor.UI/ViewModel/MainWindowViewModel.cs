@@ -9,6 +9,7 @@ using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Events;
 using TripPredictor.Common;
+using TripPredictor.Common.Interfaces;
 using TripPredictor.Services;
 using TripPredictor.UI.Events;
 

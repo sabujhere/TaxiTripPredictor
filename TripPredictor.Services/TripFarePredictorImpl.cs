@@ -5,6 +5,7 @@ using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
 using TripPredictor.Common;
+using TripPredictor.Common.Interfaces;
 
 namespace TripPredictor.Services
 {

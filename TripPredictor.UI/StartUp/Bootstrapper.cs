@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Prism.Events;
 using TripPredictor.Common;
+using TripPredictor.Common.Interfaces;
 using TripPredictor.Services;
 using TripPredictor.UI.ViewModel;
 using TripPredictor.UI.Views;

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Prism.Events;
 using TripPredictor.Common;
+using TripPredictor.Common.Interfaces;
 
 namespace TripPredictor.UI.Events
 {

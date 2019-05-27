@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Prism.Commands;
 using Prism.Events;
 using TripPredictor.Common;
+using TripPredictor.Common.Interfaces;
 using TripPredictor.UI.Events;
 
 namespace TripPredictor.UI.ViewModel
