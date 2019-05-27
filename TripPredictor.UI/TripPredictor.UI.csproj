@@ -104,7 +104,7 @@
     <Compile Include="StartUp\Bootstrapper.cs" />
     <Compile Include="ViewModel\IEvaluationMetricViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
-    <Compile Include="ViewModel\TestTripDataPredictionViewModel.cs" />
+    <Compile Include="ViewModel\TestTripTimePredictionViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="ViewModel\EvaluationMetricViewModel.cs" />
     <Compile Include="Views\EvaluationMetricView.xaml.cs">
