@@ -65,24 +65,24 @@ namespace TripPredictor.Services
                 ));
                 _mlContext.Model.Save(_trainedModel, trainingDataView.Schema, _modelPath);
 
-                var taxiTripSample = new TripData()
-                {
-                    VendorId = "1",
-                    RateCode = "1",
-                    PassengerCount = 1,
-                    TripTime = 940,
-                    TripDistance = 6.1f,
-                    PaymentType = "2",
-                    FareAmount = 0 // To predict. Actual/Observed = 15.5
-                };
+                //var taxiTripSample = new TripData()
+                //{
+                //    VendorId = "1",
+                //    RateCode = "1",
+                //    PassengerCount = 1,
+                //    TripTime = 940,
+                //    TripDistance = 6.1f,
+                //    PaymentType = "2",
+                //    FareAmount = 0 // To predict. Actual/Observed = 15.5
+                //};
 
-                ITransformer trainedModel1 = _mlContext.Model.Load(_modelPath, out var modelInputSchema);
+                //ITransformer trainedModel1 = _mlContext.Model.Load(_modelPath, out var modelInputSchema);
 
-                // Create prediction engine related to the loaded trained model
-                var predEngine = _mlContext.Model.CreatePredictionEngine<TripData, PredictedValue>(trainedModel1);
+                //// Create prediction engine related to the loaded trained model
+                //var predEngine = _mlContext.Model.CreatePredictionEngine<TripData, PredictedValue>(trainedModel1);
 
-                //Score
-                var resultprediction = predEngine.Predict(taxiTripSample);
+                ////Score
+                //var resultprediction = predEngine.Predict(taxiTripSample);
             }
             catch (Exception e)
             {
