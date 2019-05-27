@@ -15,7 +15,7 @@ namespace TripPredictor.Common
         public DateTime DOTime { get; set; }
 
         [LoadColumn(3)]
-        public double PassengerCount { get; set; }
+        public float PassengerCount { get; set; }
 
         [LoadColumn(4)]
         public float TripDistance { get; set; }
@@ -33,7 +33,7 @@ namespace TripPredictor.Common
         public string PaymentType { get; set; }
 
         [LoadColumn(9)]
-        public double FareAmount { get; set; }
+        public float FareAmount { get; set; }
 
         [LoadColumn(10)]
         public float TripTime { get; set; }

@@ -14,7 +14,7 @@ namespace TripPredictor.UI.StartUp
             var builder = new ContainerBuilder();
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
-            builder.RegisterType<TripTimePredictorImpl>().As<ITripPredictor>().SingleInstance(); 
+            builder.RegisterType<TripFarePredictorImpl>().As<ITripPredictor>().SingleInstance(); 
             builder.RegisterType<MainWindowViewModel>().AsSelf();
             builder.RegisterType<EvaluationMetricViewModel>().As<IEvaluationMetricViewModel>();
             builder.RegisterType<TestTripDataPredictionViewModel>().As<ITestTripDataPredictionViewModel>();
