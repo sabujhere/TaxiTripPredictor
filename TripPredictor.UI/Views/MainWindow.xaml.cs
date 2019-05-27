@@ -22,7 +22,7 @@ namespace TripPredictor.UI.Views
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            await _viewModel.LoadAsync();
+            //await _viewModel.LoadAsync();
         }
       
     }

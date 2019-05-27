@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.ML;
 using Microsoft.ML.Data;
@@ -16,6 +13,7 @@ namespace TripPredictor.Services
         private MLContext _mlContext;
         private TransformerChain<RegressionPredictionTransformer<LinearRegressionModelParameters>> _trainedModel;
         private readonly IFilePathFinder _filePathFinder;
+        private EstimatorChain<RegressionPredictionTransformer<LinearRegressionModelParameters>> _trainingPipeline;
 
         public TripFarePredictorImpl(IFilePathFinder filePathFinder)
         {
@@ -28,15 +26,10 @@ namespace TripPredictor.Services
                 if (trainingDataFilePath == null)
                     trainingDataFilePath = _filePathFinder.GetTrainFilePath();
 
-                
                 if (!File.Exists(trainingDataFilePath))
                 {
                     //TODO: Log this. Added event aggregation
                     return false;
-                }
-                if (_mlContext != null)
-                {
-                    //Todo Retrain the model
                 }
 
                 await Task.Run(() =>
@@ -44,8 +37,7 @@ namespace TripPredictor.Services
                     _mlContext = new MLContext(seed: 0);
                     IDataView baseTrainingDataView = _mlContext.Data.LoadFromTextFile<TripData>(trainingDataFilePath, hasHeader: true, separatorChar: ',');
                     IDataView trainingDataView = _mlContext.Data.FilterRowsByColumn(baseTrainingDataView, nameof(TripData.FareAmount), lowerBound: 1, upperBound: 150);
-
-                    // STEP 2: Common data process configuration with pipeline data transformations
+                    
                     var dataProcessPipeline = _mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: nameof(TripData.FareAmount))
                                     .Append(_mlContext.Transforms.Categorical.OneHotEncoding(outputColumnName: "VendorIdEncoded", inputColumnName: nameof(TripData.VendorId)))
                                     .Append(_mlContext.Transforms.Categorical.OneHotEncoding(outputColumnName: "RateCodeEncoded", inputColumnName: nameof(TripData.RateCode)))
@@ -58,9 +50,9 @@ namespace TripPredictor.Services
                                     , nameof(TripData.TripTime), nameof(TripData.TripDistance)));
 
                     var trainer = _mlContext.Regression.Trainers.Sdca(labelColumnName: "Label", featureColumnName: "Features");
-                    var trainingPipeline = dataProcessPipeline.Append(trainer);
-
-                    _trainedModel =trainingPipeline.Fit(trainingDataView);
+                    _trainingPipeline = dataProcessPipeline.Append(trainer);
+                    _trainedModel = _trainingPipeline.Fit(trainingDataView);
+                    
                     _mlContext.Model.Save(_trainedModel, trainingDataView.Schema, _filePathFinder.GetModelPath());
                 });
                

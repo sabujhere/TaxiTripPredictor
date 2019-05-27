@@ -55,12 +55,13 @@ namespace TripPredictor.UI.ViewModel
             return true;
         }
 
-        private void OnLoadTrainingDataExecute()
+        private async void OnLoadTrainingDataExecute()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog { Filter = "Csv files (*.csv)|*.csv" };
             if (openFileDialog.ShowDialog() == true)
             {
                 CurrentTrainingFileName = openFileDialog.FileName;
+                await LoadAsync(CurrentTrainingFileName);
             }
         }
 
@@ -68,10 +69,10 @@ namespace TripPredictor.UI.ViewModel
 
         #region Public Methods
 
-        public async Task LoadAsync()
+        public async Task LoadAsync(string filePath = null)
         {
-            StatusMessage = $"Loading {nameof(MainWindowViewModel)}";
-            var result = await TripPredictor.LoadTrainingDataAsync();
+            StatusMessage = $"Loading Training data";
+            var result = await TripPredictor.LoadTrainingDataAsync(filePath);
             
             if (result)
             {

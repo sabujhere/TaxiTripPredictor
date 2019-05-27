@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TripPredictor.Common;
-
-namespace TripPredictor.Services
+﻿namespace TripPredictor.Services
 {
     public class TripFarePredictorFilePathFinder: TripPredictorFilePathFinderBase
     {
