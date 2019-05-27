@@ -21,19 +21,21 @@ namespace TripPredictor.UI.StartUp
             builder.RegisterType<MainWindow>().AsSelf();
             builder.RegisterType<EvaluationMetricView>().AsSelf();
 
-            builder.RegisterType<TestTripTimeView>().AsSelf();
+            
 
             if (isLoadingTripFarePredictor)
             {
                 builder.RegisterType<TripFarePredictorImpl>().As<ITripPredictor>().SingleInstance();
                 builder.RegisterType<TripFarePredictionViewModel>().As<ITripDataPredictionViewModel>();
                 builder.RegisterType<TestTripFareView>().AsSelf();
+                builder.RegisterType<TripFarePredictorFilePathFinder>().As<IFilePathFinder>();
             }
             else
             {
-                builder.RegisterType<TripTimePredictionViewModel>().As<ITripPredictor>().SingleInstance();
+                builder.RegisterType<TripTimePredictorImpl>().As<ITripPredictor>().SingleInstance();
                 builder.RegisterType<TripTimePredictionViewModel>().As<ITripDataPredictionViewModel>();
                 builder.RegisterType<TestTripTimeView>().AsSelf();
+                builder.RegisterType<TripTimePredictorFilePathFinder>().As<IFilePathFinder>();
             }
 
             return builder.Build();

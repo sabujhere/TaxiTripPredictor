@@ -49,6 +49,7 @@
                   Margin="10"
                   Header="Test Model">
             <ContentControl Content="{Binding }"
+                            HorizontalAlignment="Center"
                             DataContext="{Binding TripDataPredictionViewModel}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">

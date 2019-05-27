@@ -8,9 +8,9 @@ namespace TripPredictor.Common
 {
     public interface ITripPredictor
     {
-        Task<bool> LoadTrainingDataAsync(string trainingDataFileName = null);
+        Task<bool> LoadTrainingDataAsync(string trainingDataFilePath = null);
 
-        EvaluationMetric GetEvaluationMetric(string testDataFileName = null);
+        EvaluationMetric GetEvaluationMetric();
 
         double GetPredictedResult(TripData tripData);
     }

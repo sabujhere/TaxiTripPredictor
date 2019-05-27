@@ -112,6 +112,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IFilePathFinder.cs" />
     <Compile Include="Interfaces\IPipeLineBuilder.cs" />
     <Compile Include="Interfaces\ITripPredictor.cs" />
     <Compile Include="PredictedValue.cs" />

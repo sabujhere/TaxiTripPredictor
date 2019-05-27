@@ -89,7 +89,7 @@
 
         <Label Grid.Row="6"
                Grid.Column="0"
-                       Content="Predicted Result"/>
+                       Content="Predicted Drop off time"/>
         <TextBox Grid.Row="6"
                  Grid.Column="1"
                  IsReadOnly="True" 

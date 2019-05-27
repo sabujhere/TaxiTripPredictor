@@ -39,7 +39,7 @@ namespace TripPredictor.UI.ViewModel
         protected override void OnPredictTripTimeExecute()
         {
             var score = TripPredictor.GetPredictedResult(TestTripData);
-            PredictedResult = $" Drop-off time {TestTripData.PUTime.AddSeconds(score)}";
+            PredictedResult = $"{TestTripData.PUTime.AddSeconds(score)}";
         }
         #endregion
     }

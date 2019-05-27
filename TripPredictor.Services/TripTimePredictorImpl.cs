@@ -13,21 +13,21 @@ namespace TripPredictor.Services
 {
     public class TripTimePredictorImpl:ITripPredictor
     {
+        private readonly IFilePathFinder _filePathFinder;
         private MLContext _mlContext;
         private TransformerChain<RegressionPredictionTransformer<LinearRegressionModelParameters>> _trainedModel;
-        private string _modelPath = Path.Combine(Path.GetTempPath(), "Data");
-        public TripTimePredictorImpl()
+        public TripTimePredictorImpl(IFilePathFinder filePathFinder)
         {
-            
+            _filePathFinder = filePathFinder;
         }
-        public async Task<bool> LoadTrainingDataAsync(string trainingDataFileName = null)
+        public async Task<bool> LoadTrainingDataAsync(string trainingDataFilePath = null)
         {
             try
             {
-                if (trainingDataFileName == null)
-                    trainingDataFileName = "Training_yellow_tripdata_2017-01-000.csv";
-                var filePath = GetCompleteFilePath(trainingDataFileName);
-                if (!File.Exists(filePath))
+                if (trainingDataFilePath == null)
+                    trainingDataFilePath = _filePathFinder.GetTrainFilePath();
+               
+                if (!File.Exists(trainingDataFilePath))
                 {
                     //TODO: Log this. Added event aggregation
                     return false;
@@ -36,32 +36,26 @@ namespace TripPredictor.Services
                 {
                     //Todo Retrain the model
                 }
-                _mlContext = new MLContext(seed: 0);
 
-                IDataView baseTrainingDataView = _mlContext.Data.LoadFromTextFile<TripData>(filePath, hasHeader: true, separatorChar: ',');
-                var dataProcessPipeline = _mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: nameof(TripData.TripTime))
-                    .Append(_mlContext.Transforms.Categorical.OneHotEncoding(outputColumnName: "PULocationEncoded", inputColumnName: nameof(TripData.PULocationID)))
-                    .Append(_mlContext.Transforms.Categorical.OneHotEncoding(outputColumnName: "DOLocationIDEncoded", inputColumnName: nameof(TripData.DOLocationID)))
-                    .Append(_mlContext.Transforms.NormalizeMeanVariance(outputColumnName: nameof(TripData.TripDistance)))
-                    .Append(_mlContext.Transforms.Concatenate("Features", "PULocationEncoded", "DOLocationIDEncoded",
-                        nameof(TripData.TripDistance)));
-                
-                var trainer = _mlContext.Regression.Trainers.Sdca(labelColumnName: "Label", featureColumnName: "Features");
-                var trainingPipeline = dataProcessPipeline.Append(trainer);
-                IDataView trainingDataView = _mlContext.Data.FilterRowsByColumn(baseTrainingDataView, nameof(TripData.TripTime));
+                await Task.Run(() =>
+                {
+                    _mlContext = new MLContext(seed: 0);
 
-                _modelPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "Data", "TaxiTripTimeModel.zip");
-                //File.Exists(_modelPath)
+                    IDataView baseTrainingDataView = _mlContext.Data.LoadFromTextFile<TripData>(trainingDataFilePath, hasHeader: true, separatorChar: ',');
+                    var dataProcessPipeline = _mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: nameof(TripData.TripTime))
+                        .Append(_mlContext.Transforms.Categorical.OneHotEncoding(outputColumnName: "PULocationEncoded", inputColumnName: nameof(TripData.PULocationID)))
+                        .Append(_mlContext.Transforms.Categorical.OneHotEncoding(outputColumnName: "DOLocationIDEncoded", inputColumnName: nameof(TripData.DOLocationID)))
+                        .Append(_mlContext.Transforms.NormalizeMeanVariance(outputColumnName: nameof(TripData.TripDistance)))
+                        .Append(_mlContext.Transforms.Concatenate("Features", "PULocationEncoded", "DOLocationIDEncoded",
+                            nameof(TripData.TripDistance)));
 
-                _trainedModel = await Task.Run(new Func<TransformerChain<RegressionPredictionTransformer<LinearRegressionModelParameters>>>(
-                    () =>
-                    {
-                        var test = trainingPipeline.Fit(trainingDataView);
+                    var trainer = _mlContext.Regression.Trainers.Sdca(labelColumnName: "Label", featureColumnName: "Features");
+                    var trainingPipeline = dataProcessPipeline.Append(trainer);
+                    IDataView trainingDataView = _mlContext.Data.FilterRowsByColumn(baseTrainingDataView, nameof(TripData.TripTime));
 
-                        return test;
-                    }
-                    ));
-                _mlContext.Model.Save(_trainedModel, trainingDataView.Schema, _modelPath);
+                    _trainedModel  = trainingPipeline.Fit(trainingDataView);
+                    _mlContext.Model.Save(_trainedModel, trainingDataView.Schema, _filePathFinder.GetModelPath());
+                });
                 
             }
             catch (Exception e)
@@ -73,13 +67,11 @@ namespace TripPredictor.Services
             return true;
         }
 
-        public EvaluationMetric GetEvaluationMetric(string testDataFileName = null)
+        public EvaluationMetric GetEvaluationMetric()
         {
             if (_mlContext == null)
                 return EvaluationMetric.DefaultEvaluationMetric;
-            if (testDataFileName == null)
-                testDataFileName = "Test_yellow_tripdata_2017-01-001.csv";
-            var filePath = GetCompleteFilePath(testDataFileName);
+            var filePath = _filePathFinder.GetTestFilePath();
             if (!File.Exists(filePath))
             {
                 //TODO: Log this.
@@ -94,18 +86,12 @@ namespace TripPredictor.Services
 
         public double GetPredictedResult(TripData tripData)
         {
-            ITransformer trainedModel = _mlContext.Model.Load(_modelPath, out var modelInputSchema);
+            ITransformer trainedModel = _mlContext.Model.Load(_filePathFinder.GetModelPath(), out var modelInputSchema);
 
             var predEngine = _mlContext.Model.CreatePredictionEngine<TripData, PredictedValue>(trainedModel);
 
             //Score
             return predEngine.Predict(tripData).Value;
-        }
-
-        private string GetCompleteFilePath(string fileName)
-        {
-            // ReSharper disable once AssignNullToNotNullAttribute
-            return Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "Data", fileName);
         }
     }
 }
