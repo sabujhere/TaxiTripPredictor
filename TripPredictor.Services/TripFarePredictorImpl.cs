@@ -10,15 +10,25 @@ namespace TripPredictor.Services
 {
     public class TripFarePredictorImpl:ITripPredictor
     {
+        #region Private varialbles
+
         private MLContext _mlContext;
         private TransformerChain<RegressionPredictionTransformer<LinearRegressionModelParameters>> _trainedModel;
         private readonly IFilePathFinder _filePathFinder;
-        private EstimatorChain<RegressionPredictionTransformer<LinearRegressionModelParameters>> _trainingPipeline;
+
+        #endregion
+
+        #region Constructor
 
         public TripFarePredictorImpl(IFilePathFinder filePathFinder)
         {
             _filePathFinder = filePathFinder;
         }
+
+        #endregion
+
+        #region Implementing ITripPredictor
+
         public async Task<bool> LoadTrainingDataAsync(string trainingDataFilePath = null)
         {
             try
@@ -37,7 +47,7 @@ namespace TripPredictor.Services
                     _mlContext = new MLContext(seed: 0);
                     IDataView baseTrainingDataView = _mlContext.Data.LoadFromTextFile<TripData>(trainingDataFilePath, hasHeader: true, separatorChar: ',');
                     IDataView trainingDataView = _mlContext.Data.FilterRowsByColumn(baseTrainingDataView, nameof(TripData.FareAmount), lowerBound: 1, upperBound: 150);
-                    
+
                     var dataProcessPipeline = _mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: nameof(TripData.FareAmount))
                                     .Append(_mlContext.Transforms.Categorical.OneHotEncoding(outputColumnName: "VendorIdEncoded", inputColumnName: nameof(TripData.VendorId)))
                                     .Append(_mlContext.Transforms.Categorical.OneHotEncoding(outputColumnName: "RateCodeEncoded", inputColumnName: nameof(TripData.RateCode)))
@@ -50,12 +60,12 @@ namespace TripPredictor.Services
                                     , nameof(TripData.TripTime), nameof(TripData.TripDistance)));
 
                     var trainer = _mlContext.Regression.Trainers.Sdca(labelColumnName: "Label", featureColumnName: "Features");
-                    _trainingPipeline = dataProcessPipeline.Append(trainer);
-                    _trainedModel = _trainingPipeline.Fit(trainingDataView);
-                    
+                    var trainingPipeline = dataProcessPipeline.Append(trainer);
+                    _trainedModel = trainingPipeline.Fit(trainingDataView);
+
                     _mlContext.Model.Save(_trainedModel, trainingDataView.Schema, _filePathFinder.GetModelPath());
                 });
-               
+
             }
             catch (Exception e)
             {
@@ -91,5 +101,8 @@ namespace TripPredictor.Services
             var predEngine = _mlContext.Model.CreatePredictionEngine<TripData, PredictedValue>(trainedModel);
             return predEngine.Predict(tripData).Value;
         }
+
+        #endregion
+
     }
 }

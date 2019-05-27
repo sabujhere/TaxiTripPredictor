@@ -8,7 +8,5 @@
             TrainingFileName = "Training_yellow_tripdata_2017-01-000.csv";
             ModelFileName = "TaxiTripTimeModel.zip";
         }
-
-        
     }
 }

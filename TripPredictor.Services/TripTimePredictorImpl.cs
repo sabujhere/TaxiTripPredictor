@@ -10,15 +10,22 @@ namespace TripPredictor.Services
 {
     public class TripTimePredictorImpl : ITripPredictor
     {
+        #region Private variables
+
         private readonly IFilePathFinder _filePathFinder;
         private MLContext _mlContext;
         private TransformerChain<RegressionPredictionTransformer<LinearRegressionModelParameters>> _trainedModel;
+        
+        #endregion
 
+        #region Constructor
         public TripTimePredictorImpl(IFilePathFinder filePathFinder)
         {
             _filePathFinder = filePathFinder;
         }
+        #endregion
 
+        #region Implementing ITripPredictor
         public async Task<bool> LoadTrainingDataAsync(string trainingDataFilePath = null)
         {
             try
@@ -79,7 +86,6 @@ namespace TripPredictor.Services
             {
                 //TODO: Log this.
                 return EvaluationMetric.DefaultEvaluationMetric;
-                ;
             }
 
             IDataView testDataView =
@@ -97,5 +103,7 @@ namespace TripPredictor.Services
             var predEngine = _mlContext.Model.CreatePredictionEngine<TripData, PredictedValue>(trainedModel);
             return predEngine.Predict(tripData).Value;
         }
+        #endregion
+
     }
 }
