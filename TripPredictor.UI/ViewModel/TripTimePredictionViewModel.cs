@@ -10,7 +10,7 @@ using TripPredictor.UI.Events;
 
 namespace TripPredictor.UI.ViewModel
 {
-    public class TestTripDataPredictionViewModel:ViewModelBase, ITestTripDataPredictionViewModel
+    public class TripTimePredictionViewModel:ViewModelBase, ITripDataPredictionViewModel
     {
         #region Private properties
 
@@ -51,7 +51,7 @@ namespace TripPredictor.UI.ViewModel
         #endregion
 
         #region Constructor
-        public TestTripDataPredictionViewModel(IEventAggregator eventAggregator)
+        public TripTimePredictionViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<PredictorUpdatedEvent>()

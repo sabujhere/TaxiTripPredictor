@@ -7,9 +7,9 @@ using TripPredictor.Common;
 
 namespace TripPredictor.UI.ViewModel
 {
-    public interface ITestTripDataPredictionViewModel
+    public class TripFarePredictionViewModel:ViewModelBase,ITripDataPredictionViewModel
     {
-        string PredictedResult { get; set; }
-        TripData TestTripData { get; set; }
+        public string PredictedResult { get; set; }
+        public TripData TestTripData { get; set; }
     }
 }

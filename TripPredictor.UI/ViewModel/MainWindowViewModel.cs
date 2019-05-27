@@ -31,10 +31,10 @@ namespace TripPredictor.UI.ViewModel
             ITripPredictor predictor,
             IEventAggregator eventAggregator,
             Func<IEvaluationMetricViewModel> evaluationMetricViewModelCreator, 
-            Func<ITestTripDataPredictionViewModel> testTripTimeViewModelCreator)
+            Func<ITripDataPredictionViewModel> testTripTimeViewModelCreator)
         {
             _eventAggregator = eventAggregator;
-            TestTripDataPredictionViewModel = testTripTimeViewModelCreator();
+            TripDataPredictionViewModel = testTripTimeViewModelCreator();
             EvaluationMetricViewModel = evaluationMetricViewModelCreator();
             TripPredictor = predictor;
             LoadEvaluationResult = new DelegateCommand(OnLoadTrainingDataExecute, OnLoadTrainingDataCanExecute);
@@ -110,7 +110,7 @@ namespace TripPredictor.UI.ViewModel
             }
         }
 
-        public ITestTripDataPredictionViewModel TestTripDataPredictionViewModel { get; }
+        public ITripDataPredictionViewModel TripDataPredictionViewModel { get; }
 
         #endregion
     }

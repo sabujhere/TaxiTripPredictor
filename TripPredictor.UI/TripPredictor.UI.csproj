@@ -83,8 +83,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ViewModel\ITestTripDataPredictionViewModel.cs" />
-    <Compile Include="ViewModel\TestTripFarePredictionViewModel.cs" />
+    <Compile Include="ViewModel\ITripDataPredictionViewModel.cs" />
+    <Compile Include="ViewModel\TripFarePredictionViewModel.cs" />
     <Compile Include="Views\TestTripTimeView.xaml.cs">
       <DependentUpon>TestTripTimeView.xaml</DependentUpon>
     </Compile>
@@ -104,7 +104,7 @@
     <Compile Include="StartUp\Bootstrapper.cs" />
     <Compile Include="ViewModel\IEvaluationMetricViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
-    <Compile Include="ViewModel\TestTripTimePredictionViewModel.cs" />
+    <Compile Include="ViewModel\TripTimePredictionViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="ViewModel\EvaluationMetricViewModel.cs" />
     <Compile Include="Views\EvaluationMetricView.xaml.cs">

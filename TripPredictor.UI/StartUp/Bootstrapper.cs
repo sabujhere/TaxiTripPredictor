@@ -17,7 +17,7 @@ namespace TripPredictor.UI.StartUp
             builder.RegisterType<TripFarePredictorImpl>().As<ITripPredictor>().SingleInstance(); 
             builder.RegisterType<MainWindowViewModel>().AsSelf();
             builder.RegisterType<EvaluationMetricViewModel>().As<IEvaluationMetricViewModel>();
-            builder.RegisterType<TestTripDataPredictionViewModel>().As<ITestTripDataPredictionViewModel>();
+            builder.RegisterType<TripTimePredictionViewModel>().As<ITripDataPredictionViewModel>();
             builder.RegisterType<MainWindow>().AsSelf();
             builder.RegisterType<EvaluationMetricView>().AsSelf();
             builder.RegisterType<TestTripTimeView>().AsSelf();
