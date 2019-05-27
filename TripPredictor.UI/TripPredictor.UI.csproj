@@ -84,7 +84,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ViewModel\ITripDataPredictionViewModel.cs" />
+    <Compile Include="ViewModel\TripDataPredictionViewModelBase.cs" />
     <Compile Include="ViewModel\TripFarePredictionViewModel.cs" />
+    <Compile Include="Views\TestTripFareView.xaml.cs">
+      <DependentUpon>TestTripFareView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TestTripTimeView.xaml.cs">
       <DependentUpon>TestTripTimeView.xaml</DependentUpon>
     </Compile>
@@ -114,6 +118,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\TestTripFareView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\TestTripTimeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
